@@ -1,140 +1,106 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
 using NewsAPIClient.Models;
 using Newtonsoft.Json;
 
+
 namespace NewsAPIClient.Controllers
 {
-   
+
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
+        /// <summary>
+        /// Private variables declaration section
+        /// </summary>
+        private string _serviceUrl;
+        private List<Article> _filternewsList = new List<Article>();
+        private NewsInfo _newsList = new NewsInfo();
+        
+        /// <summary>
+        /// Initializing variables in Constructor
+        /// </summary>
+        public HomeController()
+        {    
+            _filternewsList = new List<Article>();
+            _newsList = new NewsInfo();
+            _serviceUrl = "https://newsapi.org/v2/everything?apiKey=61ade6b9828d455ba0f71a59800aa73a";
         }
 
-        public List<SelectListItem> Languages
+        /// <summary>
+        /// Main Controller Action method to retrieve News asynchronously based on search parameters
+        /// </summary>
+        /// <param name="SearchString"></param>
+        /// <param name="From"></param>
+        /// <param name="To"></param>
+        /// <param name="Language"></param>
+        /// <param name="PageNumber"></param>
+        /// <param name="PageSize"></param>
+        /// <param name="Title"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> Index(DateTime? From, DateTime? To, string Language, int PageNumber=1, int PageSize=5, string Title = "bitcoin")
         {
-            get
+           // ViewData["CurrentFilter"] = SearchString;
+
+            FormatUrl(From, To, Language, PageNumber, PageSize, Title);
+
+            using (var httpClient = new HttpClient())
             {
-                return new List<SelectListItem>()
-                {
-                    new SelectListItem() { Text = "Arabic", Value = "ar" },
-                    new SelectListItem() { Text = "German", Value = "de" },
-                    new SelectListItem() { Text = "English", Value = "en" },
-                    new SelectListItem() { Text = "Spanish", Value = "es" },
-                    new SelectListItem() { Text = "French", Value = "fr" },
-                    new SelectListItem() { Text = "Hebrew", Value = "he" },
-                    new SelectListItem() { Text = "Italian", Value = "it" },
-                    new SelectListItem() { Text = "Dutch", Value = "nl" },
-                    new SelectListItem() { Text = "Norwegian", Value = "no" },
-                    new SelectListItem() { Text = "Portuguese", Value = "pt" },
-                    new SelectListItem() { Text = "Russian", Value = "ru" },
-                    new SelectListItem() { Text = "Sami", Value = "se" },
-                    new SelectListItem() { Text = "Chinese", Value = "zn" }
+                using (var response = await httpClient.GetAsync(_serviceUrl))
+                { 
+                    string apiResponse = await response.Content.ReadAsStringAsync();
 
-                };
+                    _newsList = JsonConvert.DeserializeObject<NewsInfo>(apiResponse);
+
+                    
+                }
             }
+            _newsList.PageNumber = PageNumber;
+            _newsList.PageSize = PageSize;
+            _newsList.Language = Language;
+       
+            return View(_newsList);
         }
-        public async Task<IActionResult> Index(string SearchString, DateTime? From, DateTime? To, string Title, string Country, string Language, int PageNumber=1, int PageSize=5)
+        /// <summary>
+        /// Generate URL with search parameter.
+        /// </summary>
+        /// <param name="From"></param>
+        /// <param name="To"></param>
+        /// <param name="Language"></param>
+        /// <param name="PageNumber"></param>
+        /// <param name="PageSize"></param>
+        /// <param name="Title"></param>
+        /// <returns></returns>
+        private string FormatUrl(DateTime? From, DateTime? To, string Language, int PageNumber = 1, int PageSize = 5, string Title = "bitcoin")
         {
-            ViewData["CurrentFilter"] = SearchString;
-            List<Article> filternewsList = new List<Article>();
-            NewsInfo newsList = new NewsInfo();
-            string ServiceUrl = "https://newsapi.org/v2/everything?q=bitcoin&apiKey=61ade6b9828d455ba0f71a59800aa73a";
-           
-                        
             if (PageNumber > 0)
             {
-                ServiceUrl += "&page=" + PageNumber.ToString() + "&pageSize=" + PageSize.ToString();
+                _serviceUrl += "&page=" + PageNumber.ToString() + "&pageSize=" + PageSize.ToString();
             }
 
             if (From != null)
             {
-                ServiceUrl += "&from=" + From;
+                _serviceUrl += "&from=" + From;
             }
 
             if (To != null)
             {
-                ServiceUrl += "&to=" + To;
+                _serviceUrl += "&to=" + To;
             }
 
             if (Language != null)
             {
-                ServiceUrl += "&language=" + Language;
-            }
-
-            if (Country != null)
-            {
-                ServiceUrl += "&country=" + Country;
+                _serviceUrl += "&language=" + Language;
             }
 
             if (Title != null)
             {
-                ServiceUrl += "&qTitle=" + Title;
+                _serviceUrl += "&q=" + Title;
             }
 
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync(ServiceUrl))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    newsList = JsonConvert.DeserializeObject<NewsInfo>(apiResponse);
-                        
-                    if (!String.IsNullOrEmpty(SearchString))
-                    {
-                        newsList.articles = newsList.articles
-                                            .Where(s => s.title.Contains(SearchString)
-                                            || s.author.Contains(SearchString)).ToList();
-                    }
-                }
-            }
-            newsList.PageNumber = PageNumber;
-            newsList.PageSize = PageSize;
-            newsList.Language = Language;
-            return View(newsList);
-        }
-
-        public List<SelectListItem> GetLangiages()
-        {
-
-            return new List<SelectListItem>()
-            {
-                new SelectListItem() { Text = "Arabic", Value = "ar" },
-                new SelectListItem() { Text = "German", Value = "de" },
-                new SelectListItem() { Text = "English", Value = "en" },
-                new SelectListItem() { Text = "Spanish", Value = "es" },
-                new SelectListItem() { Text = "French", Value = "fr" },
-                new SelectListItem() { Text = "Hebrew", Value = "he" },
-                new SelectListItem() { Text = "Italian", Value = "it" },
-                new SelectListItem() { Text = "Dutch", Value = "nl" },
-                new SelectListItem() { Text = "Norwegian", Value = "no" },
-                new SelectListItem() { Text = "Portuguese", Value = "pt" },
-                new SelectListItem() { Text = "Russian", Value = "ru" },
-                new SelectListItem() { Text = "Sami", Value = "se" },
-                new SelectListItem() { Text = "Chinese", Value = "zn" }
-             
-            };
-        }
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return _serviceUrl;
         }
     }
 }

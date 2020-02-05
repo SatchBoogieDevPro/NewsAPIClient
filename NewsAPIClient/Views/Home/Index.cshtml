@@ -1,130 +1,54 @@
 ﻿@model NewsInfo
 @{ Layout = "_Layout"; ViewBag.Title = "All Articles";}
 
-<h2>All Reservations</h2>
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index">Back to Full List</a>
-        </p>
-    </div>
-</form>
-<h4>Article</h4>
+
+<h4>News Articles</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        
-        <form asp-controller="Home" asp-action="Index" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
-            <div class="form-group row">
-                <label for="From" class="col-md-2 col-form-label">From:</label>
-                <div class="col-sm-10">
-                    <input type="date" class="form-control" id="From" name="From" placeholder="Start Date">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="To" class="col-sm-2 col-form-label">To:</label>
-                <div class="col-sm-10">
-                    <input type="date" class="form-control" id="To" name="To" placeholder="End Date">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="txtTitle" class="col-sm-2 col-form-label">Title:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="txtTitle" name="Title" placeholder="Title">
-                </div>
-            </div>
-            @*<div class="form-group">
-                <label id="lblCountry" class="control-label">Country</label>
-                <select id="ddlbCountry" name="Country">
-                    <option value="">Select a Country</option>
-                    <option value="ae">United Arab Emirates</option>
-                    <option value="ar">Argentina</option>
-                    <option value="at">Austria</option>
-                    <option value="au">Australia</option>
-                    <option value="be">Belgium</option>
-                    <option value="bg">Bulgaria</option>
-                    <option value="br">Brazil</option>
-                    <option value="ca">Canada</option>
-                    <option value="ch">Switzerland</option>
-                    <option value="cn">China</option>
-                    <option value="co">Colombia</option>
-                    <option value="cu">Cuba</option>
-                    <option value="cz">Czech Republic</option>
-                    <option value="de">Germany</option>
-                    <option value="eg">Egypt</option>
-                    <option value="fr">France</option>
-                    <option value="gb">United Kingdom</option>
-                    <option value="gr">Greece</option>
-                    <option value="hk">Hong Kong</option>
-                    <option value="hu">Hungary</option>
-                    <option value="id">Indonesia</option>
-                    <option value="ie">Ireland</option>
-                    <option value="il">Israel</option>
-                    <option value="in">India</option>
-                    <option value="it">Italy</option>
-                    <option value="jp">Japan</option>
-                    <option value="kr">Korea, Republic of</option>
-                    <option value="lt">Lithuania</option>
-                    <option value="lv">Latvia</option>
-                    <option value="ma">Morocco</option>
-                    <option value="mx">Mexico</option>
-                    <option value="my">Maldives</option>
-                    <option value="ng">Nigeria</option>
-                    <option value="nl">Netherlands</option>
-                    <option value="no">Norway</option>
-                    <option value="nz">New Zealand</option>
-                    <option value="ph">Philippines</option>
-                    <option value="pl">Poland</option>
-                    <option value="pt">Portugal</option>
-                    <option value="ro">Romania</option>
-                    <option value="rs">Serbia</option>
-                    <option value="ru">Russian Federation</option>
-                    <option value="sa">Saudi Arabia</option>
-                    <option value="se">Sweden</option>
-                    <option value="sg">Singapore</option>
-                    <option value="si">Slovenia</option>
-                    <option value="sk">Slovakia</option>
-                    <option value="th">Thailand</option>
-                    <option value="tr">Turkey</option>
-                    <option value="tw">Taiwan</option>
-                    <option value="ua">Ukraine</option>
-                    <option value="us">United States</option>
-                    <option value="ve">Venezuela</option>
-                    <option value="za">South Africa</option>
-                </select>
-                <span asp-validation-for="description" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <label id="lblLanguage" class="control-label">Language:</label>
-                <select id="ddlbLanguage" asp-for="Language" asp-items="@Model.Languages" >
-                    <option value="">Select a Language</option>
-                    @*<option value="ar">Arabic</option>
-                    <option value="de">German</option>
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="fr">French</option>
-                    <option value="he">Hebrew</option>
-                    <option value="it">Italian</option>
-                    <option value="nl">Dutch</option>
-                    <option value="no">Norwegian</option>
-                    <option value="pt">Portuguese</option>
-                    <option value="ru">Russian</option>
-                    <option value="se">Sami</option>
-                    <option value="zh">Chinese</option>*@
 
-                </select>
-                @*<span asp-validation-for="description" class="text-danger"></span>*@
-            </div>
+        <form asp-controller="Home" asp-action="Index" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
+            <p>
+                <div class="form-group row">
+                    <label for="From" class="col-md-2 col-form-label">From:</label>
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control" id="From" name="From" placeholder="Start Date">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="To" class="col-sm-2 col-form-label">To:</label>
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control" id="To" name="To" placeholder="End Date">
+                    </div>
+                </div>
+                </p>
+            <p style="float:right">
+                <div class="form-group row">
+                    <label for="txtTitle" class="col-sm-2 col-form-label">Title:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="txtTitle" asp-for="Title" placeholder="Title">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label id="lblLanguage" class="control-label">Language:</label>
+                    <select id="ddlbLanguage" asp-for="Language" asp-items="@Model.Languages">
+                        <option value="">Select a Language</option>
+                    </select>
+                    <span asp-validation-for="Language" class="text-danger"></span>
+                </div>
+            </p>
             <div class="form-group row">
                 <div class="col-sm-10">
-                    <button id="btnSearch" class="btn btn-primary">Search</button>
+                    <p>
+                        <button id="btnSearch" class="btn btn-primary">Search</button>
+                        <a asp-action="Index">Back to Full List</a>
+                    </p>
                 </div>
             </div>
-            @*<div class="form-group">
+            <div class="form-group">
                 <label id="lblPageSize" class="control-label">Page Size:</label>
-                <select id="ddlbPageSize" name="PageSize">
+                <select id="ddlbPageSize" asp-for="PageSize">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -145,71 +69,55 @@
                     <option value="18">18</option>
                     <option value="19">19</option>
                     <option value="20">20</option>
-                </select>*@
-                @*<span asp-validation-for="description" class="text-danger"></span>*@
-            @*</div>*@
+                </select>
+            </div>
         </form>
 
     </div>
 </div>
-<table class="table table-sm table-striped table-bordered m-2">
-    <thead><tr><th>Author</th><th>Title</th><th>Description</th><th>Content</th><th>Date</th><th>Visit Website</th><th>Image</th></tr></thead>
-    <tbody>
-        @foreach (var r in Model.articles)
-        {
+@if (Model.totalResults > 0)
+{
+    <table class="table table-sm table-striped table-bordered m-2">
+        <thead><tr><th>Author</th><th>Title</th><th>Description</th><th>Content</th><th>Date</th><th>Visit Website / Link to site</th><th>Source</th></tr></thead>
+        <tbody>
+
+            @foreach (var r in Model.articles)
+            {
             <tr>
                 <td>@r.author</td>
                 <td>@r.title</td>
                 <td>@r.description</td>
                 <td>@r.content</td>
                 <td>@r.publishedAt</td>
-                <td><a href=@r.url>go</a></td>
-                <td><img src="@r.urlToImage" width="100" height="100" /></td>
-                <td>
-                    @*<a asp-action="UpdateReservation" asp-route-id="@r.Id"><img src="/icon/edit.png" /></a>*@
-                </td>
-                <td>
-                    @*<form asp-action="DeleteReservation" method="post">
-                            <input type="hidden" value="@r.Id" name="ReservationId" />
-                            <input type="image" src="/icon/close.png" />
-                        </form>*@
-                </td>
+                <td><a href=@r.url><img src="@r.urlToImage" width="100" height="100" /></a></td>
+                <td>@r.source.name</td>
+                
             </tr>
-        }
-    </tbody>
-</table>
-@{
-    var prevDisabled = Model.PageNumber <=1 ? "disabled" : "";
-    var nextDisabled = Model.PageNumber == 20 ? "disabled" : "";
-}
-
-<a asp-action="Index"
-   asp-route-PageNumber="@(Model.PageNumber - 1)"
-   class="btn btn-default @prevDisabled">
-    Previous
-</a>
-<a asp-action="Index"
-   asp-route-PageNumber="@(Model.PageNumber == 0 ? 1 : Model.PageNumber + 1)"
-   class="btn btn-default @nextDisabled">
-    Next
-</a>
-<script>
-    var title = $("#")
-    $("#btnSearch").click(function () {
-        debugger
-        $.ajax(
-            {
-                type: "POST",
-                url: '@Url.Action("Index", "Index")',
-                data: { From: From, To: To, Title: title, Language: Language, Country : Country}, 
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                alert(data);
-            },
-            error: function (data) {
-                alert(data);
             }
-        })
-    })
-</script>
+            
+        </tbody>
+    </table>
+}
+    @{
+        var prevDisabled = Model.PageNumber <= 1 ? "disabled" : "";
+        var nextDisabled = Convert.ToInt32((Model.totalResults / Model.PageSize)) < Model.PageNumber ? "disabled" : "";
+    }
+
+    <a asp-action="Index"
+       asp-route-PageNumber="@(Model.PageNumber - 1)"
+       asp-route-Language="@(Model.Language)"
+       asp-route-Title="@(Model.Title)"
+       asp-route-From="@(Model.From)"
+       asp-route-To="@(Model.To)"
+       class="btn btn-default @prevDisabled">
+        Previous
+    </a>
+    <a asp-action="Index"
+       asp-route-PageNumber="@(Model.PageNumber == 0 ? 1 : Model.PageNumber + 1)"
+       asp-route-Language="@(Model.Language)"
+       asp-route-Title="@(Model.Title)"
+       asp-route-From="@(Model.From)"
+       asp-route-To="@(Model.To)"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
