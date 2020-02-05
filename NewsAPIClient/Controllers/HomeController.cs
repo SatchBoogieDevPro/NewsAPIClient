@@ -16,8 +16,8 @@ namespace NewsAPIClient.Controllers
         /// Private variables declaration section
         /// </summary>
         private string _serviceUrl;
-        private List<Article> _filternewsList = new List<Article>();
-        private NewsInfo _newsList = new NewsInfo();
+        private List<Article> _filternewsList;
+        private NewsInfo _newsList;
         
         /// <summary>
         /// Initializing variables in Constructor
@@ -25,9 +25,11 @@ namespace NewsAPIClient.Controllers
         public HomeController()
         {    
             _filternewsList = new List<Article>();
-            _newsList = new NewsInfo();
+            NewsList = new NewsInfo();
             _serviceUrl = "https://newsapi.org/v2/everything?apiKey=61ade6b9828d455ba0f71a59800aa73a";
         }
+
+        public NewsInfo NewsList { get => _newsList; set => _newsList = value; }
 
         /// <summary>
         /// Main Controller Action method to retrieve News asynchronously based on search parameters
@@ -52,16 +54,16 @@ namespace NewsAPIClient.Controllers
                 { 
                     string apiResponse = await response.Content.ReadAsStringAsync();
 
-                    _newsList = JsonConvert.DeserializeObject<NewsInfo>(apiResponse);
+                    NewsList = JsonConvert.DeserializeObject<NewsInfo>(apiResponse);
 
                     
                 }
             }
-            _newsList.PageNumber = PageNumber;
-            _newsList.PageSize = PageSize;
-            _newsList.Language = Language;
+            NewsList.PageNumber = PageNumber;
+            NewsList.PageSize = PageSize;
+            NewsList.Language = Language;
        
-            return View(_newsList);
+            return View(NewsList);
         }
         /// <summary>
         /// Generate URL with search parameter.
